@@ -29,7 +29,7 @@ namespace PlatformService.Controllers
             return Ok(_mapper.Map<IEnumerable<PlatformReadDto>>(platforms));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPlatformById")]
         public ActionResult<PlatformReadDto> GetPlatformById(int id)
         {
             Console.WriteLine("--> Getting Platform By Id...");
