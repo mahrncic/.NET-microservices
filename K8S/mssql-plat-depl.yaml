@@ -28,7 +28,7 @@ spec:
                   name: mssql
                   key: SA_PASSWORD
           volumeMounts:
-            - mountPath: /var/opt/mssql/data
+            - mountPath: /var/opt/mssql
               name: mssqldb
       volumes:
         - name: mssqldb
