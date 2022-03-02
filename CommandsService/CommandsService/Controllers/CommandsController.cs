@@ -26,9 +26,7 @@ namespace CommandsService.Controllers
             Console.WriteLine($"--> Getting Commands by Platform: {platformId}");
 
             if (!_repository.PlatformExists(platformId))
-            {
-                return NotFound();
-            }
+                return NotFound();       
 
             var commands = _repository.GetCommandsForPlatform(platformId);
 
@@ -41,11 +39,13 @@ namespace CommandsService.Controllers
             Console.WriteLine($"--> Getting Command: {commandId} for Platform: {platformId}");
 
             if (!_repository.PlatformExists(platformId))
-            {
                 return NotFound();
-            }
+            
 
             var command = _repository.GetCommand(platformId, commandId);
+
+            if (command == null)
+                return NotFound();
 
             return Ok(_mapper.Map<CommandReadDto>(command));
         }
