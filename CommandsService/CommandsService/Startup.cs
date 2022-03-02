@@ -1,5 +1,7 @@
+using CommandsService.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -27,6 +29,9 @@ namespace CommandsService
             });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("InMem"));
+            services.AddScoped<ICommandRepo, CommandRepo>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
