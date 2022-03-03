@@ -62,7 +62,7 @@ namespace PlatformService.AsyncDataServices
             var messageBody = Encoding.UTF8.GetBytes(message);
 
             _channel.BasicPublish(exchange: _exchange,
-                                routingKey: string.Empty,
+                                routingKey: "",
                                 basicProperties: null,
                                 messageBody);
 
