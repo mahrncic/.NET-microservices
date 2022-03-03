@@ -12,12 +12,10 @@ namespace PlatformService.AsyncDataServices
         private readonly IConfiguration _configuration;
         private readonly IConnection _connection;
         private readonly IModel _channel;
-        private readonly string _exchange;
 
         public MessageBusClient(IConfiguration configuration)
         {
             _configuration = configuration;
-            _exchange = _configuration["RabbitMQ:Exchange"];
 
             var factory = new ConnectionFactory()
             {
@@ -30,7 +28,7 @@ namespace PlatformService.AsyncDataServices
                 _connection = factory.CreateConnection();
                 _channel = _connection.CreateModel();
 
-                _channel.ExchangeDeclare(exchange: _exchange, type: ExchangeType.Fanout);
+                _channel.ExchangeDeclare(exchange: _configuration["RabbitMQ:Exchange"], type: ExchangeType.Fanout);
 
                 _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
 
@@ -61,8 +59,8 @@ namespace PlatformService.AsyncDataServices
         {
             var messageBody = Encoding.UTF8.GetBytes(message);
 
-            _channel.BasicPublish(exchange: _exchange,
-                                routingKey: "",
+            _channel.BasicPublish(exchange: _configuration["RabbitMQ:Exchange"],
+                                routingKey: string.Empty,
                                 basicProperties: null,
                                 messageBody);
 
