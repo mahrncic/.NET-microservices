@@ -25,11 +25,12 @@ namespace CommandsService.Data
         {
             Console.WriteLine("--> Seeding new platforms into the database...");
 
-            foreach(var platform in platforms)
+            foreach (var platform in platforms)
             {
                 if (!repo.ExternalPlatformExists(platform.ExternalId))
                 {
                     repo.CreatePlatform(platform);
+                    repo.SaveChanges();
                 }
             }
         }
