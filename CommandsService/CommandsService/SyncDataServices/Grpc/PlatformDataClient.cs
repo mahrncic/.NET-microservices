@@ -37,8 +37,6 @@ namespace CommandsService.SyncDataServices.Grpc
                 Console.WriteLine($"--> Exception happened when requesting all platforms from gRPC: {ex.Message}");
                 return null;
             }
-
-            client.GetAllPlatforms(request);
         }
     }
 }

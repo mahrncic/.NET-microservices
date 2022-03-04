@@ -1,6 +1,7 @@
 using CommandsService.AsyncDataServices;
 using CommandsService.Data;
 using CommandsService.EventProcessing;
+using CommandsService.SyncDataServices.Grpc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,7 @@ namespace CommandsService
             services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("InMem"));
             services.AddScoped<ICommandRepo, CommandRepo>();
             services.AddSingleton<IEventProcessor, EventProcessor>();
+            services.AddScoped<IPlatformDataClient, PlatformDataClient>();
 
             services.AddHostedService<MessageBusSubscriber>();
         }
