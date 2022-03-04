@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using PlatformService;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 namespace CommandsService.SyncDataServices.Grpc
 {
@@ -23,7 +24,11 @@ namespace CommandsService.SyncDataServices.Grpc
         {
             Console.WriteLine($"--> Getting All Platforms from gRPC: {_configuration["GrpcPlatformUrl"]}");
 
-            var channel = GrpcChannel.ForAddress(_configuration["GrpcPlatformUrl"]);
+            var httpHandler = new HttpClientHandler();
+            httpHandler.ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+            var channel = GrpcChannel.ForAddress(_configuration["GrpcPlatformUrl"], new GrpcChannelOptions { HttpHandler = httpHandler});
             var client = new GrpcPlatform.GrpcPlatformClient(channel);
             var request = new GetAllRequest();
 
