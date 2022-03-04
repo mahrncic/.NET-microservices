@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,8 +8,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using PlatformService.AsyncDataServices;
 using PlatformService.Data;
+using PlatformService.SyncDataServices.Grpc;
 using PlatformService.SyncDataServices.Http;
 using System;
+using System.IO;
 
 namespace PlatformService
 {
@@ -50,6 +53,8 @@ namespace PlatformService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });
             });
 
+            services.AddGrpc();
+
             Console.WriteLine($"--> CommandService Endpoint {Configuration["CommandServiceUrl"]}");
         }
 
@@ -69,6 +74,12 @@ namespace PlatformService
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapGrpcService<GrpcPlatformService>();
+
+                endpoints.MapGet("/protos/platforms.proto", async context =>
+                {
+                    await context.Response.WriteAsync(File.ReadAllText("protos/platforms.proto"));
+                });
             });
 
             PrepDb.PrepPopulation(app, env.IsProduction());
